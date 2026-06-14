@@ -30,6 +30,7 @@ const warningNotice = document.getElementById('warning-notice') as HTMLElement;
 const btnHUDPause = document.getElementById('btn-hud-pause') as HTMLElement;
 const inGameModal = document.getElementById('in-game-controls-modal') as HTMLElement;
 const btnResumeGame = document.getElementById('btn-resume-game') as HTMLElement;
+const btnPauseQuit = document.getElementById('btn-pause-quit') as HTMLElement;
 
 // Main state tracking
 let selectedMode: 'asteroids' | 'duel' | 'vs-ai' = 'asteroids';
@@ -386,6 +387,14 @@ btnResumeGame?.addEventListener('click', () => {
   sound.playCollect();
   engine.paused = false;
   inGameModal.classList.add('hidden');
+});
+
+btnPauseQuit?.addEventListener('click', () => {
+  sound.playCollect();
+  engine.stop();
+  engine.paused = false;
+  inGameModal.classList.add('hidden');
+  showScreen('menu');
 });
 
 // Initial load

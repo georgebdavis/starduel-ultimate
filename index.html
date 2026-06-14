@@ -229,8 +229,8 @@
     <!-- Pause / HUD Warning Notifications -->
     <div id="warning-notice" class="hud-notification hidden">WARNING: COLLISION IMMINENT</div>
 
-    <!-- Gameplay Fixed Pause/Controls HUD Button -->
-    <button id="btn-hud-pause" class="btn btn-secondary hidden" style="position: absolute; top: 20px; right: 30px; width: auto; max-width: 140px; margin: 0; padding: 8px 15px; font-size: 0.8rem; z-index: 99; pointer-events: auto;">⚙ CONTROLS</button>
+    <!-- Gameplay Fixed Pause/Controls HUD Button (Gear icon in middle right) -->
+    <button id="btn-hud-pause" class="btn btn-secondary hidden" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; z-index: 99; pointer-events: auto;">⚙</button>
 
     <!-- In-Game Controls Modal Overlay -->
     <div id="in-game-controls-modal" class="ui-screen hidden" style="z-index: 100;">
@@ -257,7 +257,10 @@
           </div>
         </div>
 
-        <button id="btn-resume-game" class="btn btn-primary mt-20" style="margin-top: 20px;">RESUME SYSTEM</button>
+        <div style="display: flex; gap: 15px; justify-content: center; max-width: 440px; margin: 20px auto 0;">
+          <button id="btn-resume-game" class="btn btn-primary" style="margin: 0; flex: 1;">RESUME SYSTEM</button>
+          <button id="btn-pause-quit" class="btn btn-secondary" style="margin: 0; flex: 1; border-color: rgba(255, 51, 102, 0.4); color: #ff3366;">ABANDON MISSION</button>
+        </div>
       </div>
     </div>
   </div>
