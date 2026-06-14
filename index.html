@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StarDuel Ultimate | Space Arcade</title>
+  <!-- SEO Tags -->
+  <meta name="description" content="A high-performance local space shooter browser game. Battle in 1v1 local play, face AI, or survive asteroid storms with dynamic anime-style action.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/index.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Visual Speedline FX Canvas (Overlay) -->
+    <canvas id="fx-canvas"></canvas>
+
+    <!-- ==================== UI SCREEN OVERLAYS ==================== -->
+
+    <!-- Main Menu -->
+    <div id="menu-screen" class="ui-screen active">
+      <div class="glow-container">
+        <h1 class="game-title">STAR<span class="highlight">DUEL</span><br><span class="subtitle">ULTIMATE</span></h1>
+      </div>
+      <div class="menu-options">
+        <button id="btn-asteroids" class="btn btn-primary" data-mode="asteroids">
+          <span class="btn-text">ASTEROIDS SURVIVAL</span>
+          <span class="btn-sub">Solo Wave-Defense & Upgrades</span>
+        </button>
+        <button id="btn-vs-ai" class="btn btn-primary" data-mode="vs-ai">
+          <span class="btn-text">VERSUS AI BATTLE</span>
+          <span class="btn-sub">Duel the Cyber-Intelligent System</span>
+        </button>
+        <button id="btn-duel" class="btn btn-primary" data-mode="duel">
+          <span class="btn-text">LOCAL 1V1 DUEL</span>
+          <span class="btn-sub">Same Keyboard Combat</span>
+        </button>
+        <button id="btn-settings" class="btn btn-secondary">
+          <span class="btn-text">CONTROLS & AUDIO</span>
+        </button>
+      </div>
+      <div class="credits">Created in custom retro-anime vector style</div>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div id="settings-screen" class="ui-screen hidden">
+      <div class="glass-panel text-center">
+        <h2>GAME SETTINGS</h2>
+        <div class="settings-grid">
+          <div class="setting-item">
+            <span class="setting-label">Sound Effects Volume</span>
+            <input type="range" id="volume-sfx" min="0" max="100" value="50">
+          </div>
+          <div class="setting-item">
+            <span class="setting-label">Background Audio</span>
+            <input type="range" id="volume-music" min="0" max="100" value="30">
+          </div>
+          <div class="control-mappings">
+            <h3>DEFAULT CONTROLS</h3>
+            <div class="keys-display">
+              <div>
+                <strong>Player 1 (Left / WASD):</strong>
+                <p>W/S: Thruster / Retro | A/D: Rotate | Space: Shoot | Shift: Special</p>
+              </div>
+              <div>
+                <strong>Player 2 (Right / Arrow Keys):</strong>
+                <p>▲/▼: Thruster / Retro | ◄/►: Rotate | Enter: Shoot | R-Ctrl: Special</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="btn-settings-back" class="btn btn-secondary mt-20">BACK TO MENU</button>
+      </div>
+    </div>
+
+    <!-- Ship Selection Screen -->
+    <div id="ship-select-screen" class="ui-screen hidden">
+      <h2 class="section-title">CHOOSE YOUR STRIKER</h2>
+      <div class="select-container">
+        <!-- Player 1 Column -->
+        <div id="p1-select" class="select-column">
+          <h3 class="player-header p1-color">PLAYER 1</h3>
+          <div class="ship-grid" id="p1-ship-list">
+            <!-- Procedurally populated or hardcoded -->
+          </div>
+        </div>
+
+        <!-- Player 2 / AI Column (Only shown for 1v1 / VS AI) -->
+        <div id="p2-select" class="select-column">
+          <h3 class="player-header p2-color" id="p2-select-title">PLAYER 2</h3>
+          <div class="ship-grid" id="p2-ship-list">
+            <!-- Procedurally populated -->
+          </div>
+        </div>
+      </div>
+      <div class="select-footer">
+        <button id="btn-select-back" class="btn btn-secondary">BACK</button>
+        <button id="btn-start-game" class="btn btn-primary hidden">LAUNCH MISSION</button>
+      </div>
+    </div>
+
+    <!-- HUD Overlay for Survival Mode -->
+    <div id="survival-hud" class="hud-container hidden">
+      <div class="hud-top">
+        <div class="hud-stats-group">
+          <div class="hud-stat"><span class="label">SCORE:</span> <span id="survival-score" class="value">000000</span></div>
+          <div class="hud-stat"><span class="label">WAVE:</span> <span id="survival-wave" class="value">1</span></div>
+        </div>
+        <div class="hud-stats-group text-right">
+          <div class="hud-stat"><span class="label">SCRAP:</span> <span id="survival-scrap" class="value text-gold">$0</span></div>
+          <div class="hud-stat"><span class="label">LIVES:</span> <span id="survival-lives" class="value text-red">❤❤❤</span></div>
+        </div>
+      </div>
+      <div class="hud-bottom">
+        <div class="gauge-container">
+          <div class="gauge-label">SHIELD</div>
+          <div class="gauge-track"><div id="survival-shield-bar" class="gauge-fill shield-fill" style="width: 100%;"></div></div>
+        </div>
+        <div class="gauge-container">
+          <div class="gauge-label">ENERGY</div>
+          <div class="gauge-track"><div id="survival-energy-bar" class="gauge-fill energy-fill" style="width: 100%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD Overlay for Duel/VS AI Mode -->
+    <div id="duel-hud" class="hud-container hidden">
+      <div class="duel-players">
+        <!-- Player 1 Stats -->
+        <div class="player-hud-panel p1-side">
+          <div class="player-hud-header">
+            <span class="hud-ship-name" id="p1-hud-name">INTERCEPTOR</span>
+            <span class="hud-score" id="p1-hud-score">WINS: 0</span>
+          </div>
+          <div class="gauge-container">
+            <div class="gauge-track"><div id="p1-shield-bar" class="gauge-fill shield-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="gauge-container mini">
+            <div class="gauge-track"><div id="p1-energy-bar" class="gauge-fill energy-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+
+        <!-- VS Center Indicator -->
+        <div class="duel-vs-bar">VS</div>
+
+        <!-- Player 2 / AI Stats -->
+        <div class="player-hud-panel p2-side">
+          <div class="player-hud-header text-right">
+            <span class="hud-score" id="p2-hud-score">WINS: 0</span>
+            <span class="hud-ship-name" id="p2-hud-name">DREADNOUGHT</span>
+          </div>
+          <div class="gauge-container">
+            <div class="gauge-track"><div id="p2-shield-bar" class="gauge-fill shield-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="gauge-container mini">
+            <div class="gauge-track"><div id="p2-energy-bar" class="gauge-fill energy-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shop/Upgrade screen (Asteroids survival wave transition) -->
+    <div id="shop-screen" class="ui-screen hidden">
+      <div class="glass-panel shop-panel">
+        <h2 class="text-gold">WAVE DEFEATED! DOCKING BAY</h2>
+        <p class="shop-subtitle">Spend collected scrap cores to upgrade your ship modules</p>
+        <div class="scrap-count">SCRAP CORES AVAILABLE: <span id="shop-scrap" class="text-gold">$0</span></div>
+        <div class="shop-grid">
+          <div class="shop-card" data-upgrade="weapon">
+            <h4>ANIME BUSTER CANNON</h4>
+            <p>Increases damage and firing rate of main cannons.</p>
+            <button class="btn btn-action shop-buy-btn" data-cost="5">UPGRADE - $5</button>
+          </div>
+          <div class="shop-card" data-upgrade="shield">
+            <h4>FORCE FIELD GENERATOR</h4>
+            <p>Increases max shield capacity and recharge rate.</p>
+            <button class="btn btn-action shop-buy-btn" data-cost="5">UPGRADE - $5</button>
+          </div>
+          <div class="shop-card" data-upgrade="engine">
+            <h4>AFTERBURNER BOOSTER</h4>
+            <p>Improves max engine acceleration and turning agility.</p>
+            <button class="btn btn-action shop-buy-btn" data-cost="4">UPGRADE - $4</button>
+          </div>
+          <div class="shop-card" data-upgrade="special">
+            <h4>AMPLIFIED DISCHARGE</h4>
+            <p>Reduces cost of using the Special Weapon ability.</p>
+            <button class="btn btn-action shop-buy-btn" data-cost="6">UPGRADE - $6</button>
+          </div>
+        </div>
+        <div class="shop-footer">
+          <button id="btn-next-wave" class="btn btn-primary">LAUNCH NEXT WAVE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="ui-screen hidden">
+      <div class="glass-panel text-center">
+        <h1 id="game-over-title" class="danger-title">MISSION FAILED</h1>
+        <p id="game-over-summary" class="game-over-stats">WAVE SURVIVED: 5 | SCORE: 12,400</p>
+        <div class="menu-options mt-20">
+          <button id="btn-restart" class="btn btn-primary">RELAUNCH</button>
+          <button id="btn-quit" class="btn btn-secondary">RETURN TO SPACEPORT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause / HUD Warning Notifications -->
+    <div id="warning-notice" class="hud-notification hidden">WARNING: COLLISION IMMINENT</div>
+  </div>
+
+  <!-- Boot script -->
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
