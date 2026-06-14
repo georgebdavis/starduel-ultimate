@@ -44,7 +44,23 @@
           <span class="btn-text">CONTROLS & AUDIO</span>
         </button>
       </div>
-      <div class="credits">Created in custom retro-anime vector style</div>
+
+      <!-- Quick Controls Reminder on Main Menu -->
+      <div class="quick-controls-menu glass-panel" style="margin-top: 15px; padding: 15px 25px; max-width: 600px; width: auto; font-size: 0.8rem;">
+        <h4 style="color: #fff; margin-bottom: 5px; font-size: 0.9rem; letter-spacing: 0.05rem;">QUICK KEYBOARD BINDINGS</h4>
+        <div style="display: flex; gap: 20px; text-align: left; font-family: var(--font-mono); color: #a0aec0;">
+          <div>
+            <strong class="p1-color" style="display: inline-block; margin-bottom: 3px;">P1 (WASD):</strong>
+            <p style="font-size: 0.75rem; line-height: 1.4;">W/S: Thrust/Retro | A/D: Turn | Space: Shoot | Shift: Special</p>
+          </div>
+          <div style="border-left: 1px solid rgba(255, 255, 255, 0.1); padding-left: 20px;">
+            <strong class="p2-color" style="display: inline-block; margin-bottom: 3px;">P2 (Arrows):</strong>
+            <p style="font-size: 0.75rem; line-height: 1.4;">▲/▼: Thrust/Retro | ◄/►: Turn | Enter: Shoot | Ctrl: Special</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="credits" style="margin-top: 15px;">Created in custom retro-anime vector style</div>
     </div>
 
     <!-- Settings Overlay -->
@@ -212,6 +228,38 @@
 
     <!-- Pause / HUD Warning Notifications -->
     <div id="warning-notice" class="hud-notification hidden">WARNING: COLLISION IMMINENT</div>
+
+    <!-- Gameplay Fixed Pause/Controls HUD Button -->
+    <button id="btn-hud-pause" class="btn btn-secondary hidden" style="position: absolute; top: 20px; right: 30px; width: auto; max-width: 140px; margin: 0; padding: 8px 15px; font-size: 0.8rem; z-index: 99; pointer-events: auto;">⚙ CONTROLS</button>
+
+    <!-- In-Game Controls Modal Overlay -->
+    <div id="in-game-controls-modal" class="ui-screen hidden" style="z-index: 100;">
+      <div class="glass-panel text-center" style="max-width: 650px;">
+        <h2 style="color: var(--color-border-glow); text-shadow: var(--p1-glow);">MISSION PAUSED</h2>
+        <p class="shop-subtitle" style="margin-bottom: 25px;">Review ship controls below. Tap resume to jump back in.</p>
+        
+        <div class="control-mappings" style="border: none; padding-top: 0; margin-bottom: 15px;">
+          <div class="keys-display">
+            <div style="text-align: left;">
+              <strong class="p1-color">PLAYER 1 (WASD)</strong>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">W / S:</span> Thruster / Retro-Brake</p>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">A / D:</span> Rotate Hull Left / Right</p>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">Space:</span> Primary Weapon Fire</p>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">L-Shift:</span> Special Ship Ability</p>
+            </div>
+            <div style="text-align: left;">
+              <strong class="p2-color">PLAYER 2 (ARROWS)</strong>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">▲ / ▼:</span> Thruster / Retro-Brake</p>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">◄ / ►:</span> Rotate Hull Left / Right</p>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">Enter:</span> Primary Weapon Fire</p>
+              <p style="margin: 5px 0; font-size: 0.8rem;"><span style="color:#fff;">R-Ctrl:</span> Special Ship Ability</p>
+            </div>
+          </div>
+        </div>
+
+        <button id="btn-resume-game" class="btn btn-primary mt-20" style="margin-top: 20px;">RESUME SYSTEM</button>
+      </div>
+    </div>
   </div>
 
   <!-- Boot script -->

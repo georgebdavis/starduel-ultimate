@@ -17,6 +17,7 @@ export class GameEngine {
   // Mode & States
   public mode: GameMode = 'menu';
   private active = false;
+  public paused = false;
   private lastTime = 0;
   private stateChangeCallback: (mode: GameMode) => void;
 
@@ -73,6 +74,7 @@ export class GameEngine {
   public start(mode: GameMode, ship1Class: ShipClass, ship2Class?: ShipClass) {
     this.mode = mode;
     this.active = true;
+    this.paused = false;
     this.lastTime = performance.now();
     this.input.startCapturing();
     this.sound.resume();
@@ -185,7 +187,9 @@ export class GameEngine {
     // Cap delta time to prevent physics clipping in case of lag spikes
     if (dt > 0.1) dt = 0.1;
 
-    this.update(dt);
+    if (!this.paused) {
+      this.update(dt);
+    }
     this.draw();
 
     requestAnimationFrame(this.gameLoop);

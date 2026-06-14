@@ -27,6 +27,9 @@ const screens: Record<GameMode, HTMLElement | null> = {
 const survivalHUD = document.getElementById('survival-hud') as HTMLElement;
 const duelHUD = document.getElementById('duel-hud') as HTMLElement;
 const warningNotice = document.getElementById('warning-notice') as HTMLElement;
+const btnHUDPause = document.getElementById('btn-hud-pause') as HTMLElement;
+const inGameModal = document.getElementById('in-game-controls-modal') as HTMLElement;
+const btnResumeGame = document.getElementById('btn-resume-game') as HTMLElement;
 
 // Main state tracking
 let selectedMode: 'asteroids' | 'duel' | 'vs-ai' = 'asteroids';
@@ -54,10 +57,16 @@ function showScreen(mode: GameMode) {
   }
 
   // Handle gameplay HUD triggers
-  if (mode === 'asteroids') {
-    survivalHUD.classList.remove('hidden');
-  } else if (mode === 'duel' || mode === 'vs-ai') {
-    duelHUD.classList.remove('hidden');
+  if (mode === 'asteroids' || mode === 'duel' || mode === 'vs-ai') {
+    btnHUDPause.classList.remove('hidden');
+    if (mode === 'asteroids') {
+      survivalHUD.classList.remove('hidden');
+    } else {
+      duelHUD.classList.remove('hidden');
+    }
+  } else {
+    btnHUDPause.classList.add('hidden');
+    inGameModal.classList.add('hidden');
   }
 
   // Handle special screen setup
@@ -360,6 +369,23 @@ document.getElementById('btn-restart')?.addEventListener('click', () => {
 
 document.getElementById('btn-quit')?.addEventListener('click', () => {
   showScreen('menu');
+});
+
+// HUD Pause controls overlay handlers
+btnHUDPause?.addEventListener('click', () => {
+  sound.playCollect();
+  engine.paused = true;
+  inGameModal.classList.remove('hidden');
+  
+  // Stop thruster continuous noise
+  if (engine.player1) sound.stopThruster(engine.player1.id);
+  if (engine.player2) sound.stopThruster(engine.player2.id);
+});
+
+btnResumeGame?.addEventListener('click', () => {
+  sound.playCollect();
+  engine.paused = false;
+  inGameModal.classList.add('hidden');
 });
 
 // Initial load
