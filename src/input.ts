@@ -14,7 +14,7 @@ export class InputHandler {
 
     if (this.isCapturing && [
       'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 
-      'KeyW', 'KeyA', 'KeyS', 'KeyD', 'ControlRight', 'ShiftLeft', 'ShiftRight', 'Enter'
+      'KeyW', 'KeyA', 'KeyS', 'KeyD', 'ShiftLeft', 'Enter', 'Slash'
     ].includes(code)) {
       e.preventDefault();
     }
@@ -46,7 +46,7 @@ export class InputHandler {
       rotateLeft: this.isPressed('KeyA'),
       rotateRight: this.isPressed('KeyD'),
       shoot: this.isPressed('Space'),
-      special: this.isPressed('ShiftLeft') || this.isPressed('ShiftRight'),
+      special: this.isPressed('ShiftLeft'),
     };
   }
 
@@ -57,7 +57,7 @@ export class InputHandler {
       rotateLeft: this.isPressed('ArrowLeft'),
       rotateRight: this.isPressed('ArrowRight'),
       shoot: this.isPressed('Enter'),
-      special: this.isPressed('ControlRight') || this.isPressed('ControlLeft'),
+      special: this.isPressed('Slash'),
     };
   }
 

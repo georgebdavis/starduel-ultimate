@@ -58,6 +58,17 @@ export const SHIP_CONFIGS: Record<ShipClass, ShipStats & { name: string; color: 
   }
 };
 
+function invertColor(hex: string): string {
+  if (hex.startsWith('#')) hex = hex.slice(1);
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  const invR = (255 - r).toString(16).padStart(2, '0');
+  const invG = (255 - g).toString(16).padStart(2, '0');
+  const invB = (255 - b).toString(16).padStart(2, '0');
+  return `#${invR}${invG}${invB}`;
+}
+
 export class Ship extends BaseEntity {
   public id: string;
   public shipClass: ShipClass;
@@ -101,6 +112,10 @@ export class Ship extends BaseEntity {
     this.shipClass = shipClass;
     this.name = config.name;
     this.color = config.color;
+    
+    if (id === 'player2') {
+      this.color = invertColor(this.color);
+    }
     
     this.maxShield = config.maxShield;
     this.shield = this.maxShield;

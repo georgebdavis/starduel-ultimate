@@ -282,13 +282,19 @@ function syncHUD() {
     const p2EnergyBar = document.getElementById('p2-energy-bar') as HTMLElement;
 
     p1HUDName.textContent = engine.player1.name;
+    p1HUDName.style.color = engine.player1.color;
     p1HUDScore.textContent = `WINS: ${engine.player1.wins}`;
     p1ShieldBar.style.width = `${(engine.player1.shield / engine.player1.maxShield) * 100}%`;
+    p1ShieldBar.style.background = engine.player1.color;
+    p1ShieldBar.style.boxShadow = `0 0 10px ${engine.player1.color}`;
     p1EnergyBar.style.width = `${(engine.player1.energy / engine.player1.maxEnergy) * 100}%`;
 
     p2HUDName.textContent = engine.player2.name;
+    p2HUDName.style.color = engine.player2.color;
     p2HUDScore.textContent = `WINS: ${engine.player2.wins}`;
     p2ShieldBar.style.width = `${(engine.player2.shield / engine.player2.maxShield) * 100}%`;
+    p2ShieldBar.style.background = engine.player2.color;
+    p2ShieldBar.style.boxShadow = `0 0 10px ${engine.player2.color}`;
     p2EnergyBar.style.width = `${(engine.player2.energy / engine.player2.maxEnergy) * 100}%`;
   }
 }
