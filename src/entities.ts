@@ -49,6 +49,8 @@ export class Projectile extends BaseEntity {
   public speed = 600;
   public isMine = false;
   public color = '#00f0ff';
+  public isHoming = false;
+  public armTimer = 0.45; // time in seconds before it can hit the owner
 
   constructor(
     x: number,
@@ -71,6 +73,10 @@ export class Projectile extends BaseEntity {
   }
 
   public update(dt: number, width: number, height: number) {
+    if (this.armTimer > 0) {
+      this.armTimer -= dt;
+    }
+
     // If homing missile, adjust velocity towards target
     if (this.target && this.target.active && !this.isMine) {
       const targetDir = Vector.normalize(Vector.sub(this.target, this));

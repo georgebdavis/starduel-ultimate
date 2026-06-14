@@ -354,7 +354,8 @@ export class Ship extends BaseEntity {
         
         const frontPos = getRotatedOffset(this.x, this.y, 25, 0, this.rotation);
         const missile = new Projectile(frontPos.x, frontPos.y, Math.cos(this.rotation) * 200, Math.sin(this.rotation) * 200, this.id, 50, this.color, false);
-        missile.life = 5.0; // Lives longer to home in
+        missile.isHoming = true;
+        missile.life = 4.5; // ~1.5 screens of travel distance at 400px/s (1800px)
         missile.speed = 400;
         
         // Search for nearest enemy entity (asteroid or other ship)

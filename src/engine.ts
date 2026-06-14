@@ -339,20 +339,36 @@ export class GameEngine {
       if (!proj.active) continue;
       
       // Check P1
-      if (this.player1 && this.player1.active && proj.ownerId !== this.player1.id) {
+      if (this.player1 && this.player1.active && (proj.ownerId !== this.player1.id || (proj.isHoming && proj.armTimer <= 0))) {
         if (checkHullCollision(proj.x, proj.y, proj.rotation, proj.getCollisionHulls(), this.player1.x, this.player1.y, this.player1.rotation, this.player1.getCollisionHulls())) {
           proj.active = false;
-          this.player1.takeDamage(proj.damage, this.sound, this.particles);
+          if (proj.isHoming) {
+            // Shut down specials: set energy to 0, lock special timer, no shield damage
+            this.player1.energy = 0;
+            this.player1.specialTimer = 6.0; // 6s lockout
+            this.sound.playAlert();
+            this.particles.spawnExplosion(proj.x, proj.y, '#ffd700', 1.2);
+          } else {
+            this.player1.takeDamage(proj.damage, this.sound, this.particles);
+          }
           this.camera.triggerShake(12, 0.25);
           break;
         }
       }
 
       // Check P2
-      if (this.player2 && this.player2.active && proj.ownerId !== this.player2.id) {
+      if (this.player2 && this.player2.active && (proj.ownerId !== this.player2.id || (proj.isHoming && proj.armTimer <= 0))) {
         if (checkHullCollision(proj.x, proj.y, proj.rotation, proj.getCollisionHulls(), this.player2.x, this.player2.y, this.player2.rotation, this.player2.getCollisionHulls())) {
           proj.active = false;
-          this.player2.takeDamage(proj.damage, this.sound, this.particles);
+          if (proj.isHoming) {
+            // Shut down specials: set energy to 0, lock special timer, no shield damage
+            this.player2.energy = 0;
+            this.player2.specialTimer = 6.0; // 6s lockout
+            this.sound.playAlert();
+            this.particles.spawnExplosion(proj.x, proj.y, '#ffd700', 1.2);
+          } else {
+            this.player2.takeDamage(proj.damage, this.sound, this.particles);
+          }
           this.camera.triggerShake(12, 0.25);
           break;
         }
